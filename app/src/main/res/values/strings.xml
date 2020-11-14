@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">MyRecoder</string>
+    <string name="record_button">Record</string>
+    <string name="stop_button">STOP</string>
+    <string name="play_back">PLAYBACK</string>
+    <string name="PLAYBACK">PLAYBACK</string>
+</resources>

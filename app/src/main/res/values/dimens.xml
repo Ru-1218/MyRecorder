@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <dimen name="button_margin_start">120</dimen>
+    <dimen name="button_margin_top">50</dimen>
+    <dimen name="width">130</dimen>
+    <dimen name="hight">50</dimen>
+</resources>
