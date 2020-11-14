@@ -112,6 +112,7 @@ class MainActivity : AppCompatActivity() {
 
         record.setOnClickListener(listener)
         stop.setOnClickListener(listener)
+        playback.setOnClickListener(listener)
 
     }
 
@@ -119,6 +120,7 @@ class MainActivity : AppCompatActivity() {
     private inner class RecordButton : View.OnClickListener {
         override fun onClick(v: View?) {
             Log.i(LOG_TAG, "クリック成功")
+            Log.i(LOG_TAG, fileName)
 
             if(v != null){
                 when(v.id){
@@ -137,7 +139,6 @@ class MainActivity : AppCompatActivity() {
                         onPlay(true)
                         Log.i(LOG_TAG, "再生中")
                     }
-
                 }
             }
 
