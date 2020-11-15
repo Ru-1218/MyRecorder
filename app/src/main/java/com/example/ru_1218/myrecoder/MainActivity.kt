@@ -1,16 +1,17 @@
 package com.example.ru_1218.myrecoder
 
 import android.Manifest
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
 import android.content.pm.PackageManager
 import android.media.MediaPlayer
 import android.media.MediaRecorder
-import java.io.IOException
+import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Button
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import java.io.IOException
+
 
 private const val LOG_TAG = "AudioRecordTest"
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
@@ -33,6 +34,8 @@ class MainActivity : AppCompatActivity() {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         permissionToRecordAccepted = if (requestCode == REQUEST_RECORD_AUDIO_PERMISSION) {
             grantResults[0] == PackageManager.PERMISSION_GRANTED
+
+
         } else {
             false
         }
@@ -57,7 +60,7 @@ class MainActivity : AppCompatActivity() {
                 setDataSource(fileName)
                 prepare()
                 start()
-            } catch (e: IOException) {
+            } catch(e: IOException) {
                 Log.e(LOG_TAG, "prepare() failed")
             }
         }
@@ -81,7 +84,7 @@ class MainActivity : AppCompatActivity() {
 
             try {
                 prepare()
-            } catch (e: IOException) {
+            } catch (e: IOException){
                 Log.e(LOG_TAG, "prepare() failed")
             }
 
@@ -121,6 +124,7 @@ class MainActivity : AppCompatActivity() {
         override fun onClick(v: View?) {
             Log.i(LOG_TAG, "クリック成功")
             Log.i(LOG_TAG, fileName)
+
 
             if(v != null){
                 when(v.id){
