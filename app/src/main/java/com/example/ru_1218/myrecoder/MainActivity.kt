@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import java.io.IOException
 import android.content.Intent
-import android.widget.AdapterView
+import java.util.*
 
 private const val LOG_TAG = "AudioRecordTest"
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
@@ -103,7 +103,7 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        fileName = "${externalCacheDir?.absolutePath}/audiorecordtest.3gp"
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         ActivityCompat.requestPermissions(this, permissions, REQUEST_RECORD_AUDIO_PERMISSION)
@@ -130,12 +130,14 @@ class MainActivity : AppCompatActivity() {
         override fun onClick(v: View?) {
             Log.i(LOG_TAG, "クリック成功")
             Log.i(LOG_TAG, fileName)
-
+            val uuidString = UUID.randomUUID().toString()//クリックイベント時にuuidを生成
+            fileName = "${externalCacheDir?.absolutePath}/${uuidString}.3gp"
 
             if(v != null){
                 when(v.id){
                     //録音開始ボタン
                     R.id.redord -> {
+
                         onRecord(true)
                         Log.i(LOG_TAG, "録音開始")
                     }
