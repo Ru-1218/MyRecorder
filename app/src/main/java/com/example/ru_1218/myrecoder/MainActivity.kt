@@ -12,7 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import java.io.IOException
 import android.content.Intent
-
+import android.widget.AdapterView
 
 private const val LOG_TAG = "AudioRecordTest"
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
@@ -123,14 +123,7 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    private fun voiceListEvent() {
-        val fileVoice = fileName
 
-        val intent = Intent(applicationContext, PlayBackActivity::class.java)
-        intent.putExtra("voice_file", fileVoice) //2画面に送るデータを格納
-        startActivity(intent) //2画面の起動
-
-    }
 
     //クリックイベントの設定
     private inner class RecordButton : View.OnClickListener {
@@ -157,8 +150,10 @@ class MainActivity : AppCompatActivity() {
                         Log.i(LOG_TAG, "再生中")
                     }
                     R.id.list_btn -> {
-                        voiceListEvent()//2画面用のイベント作成
                         Log.i(LOG_TAG, "2画面のイベントの作成")
+                        val intent = Intent(applicationContext, PlayBackActivity::class.java)
+                        intent.putExtra("voice_file", fileName) //2画面に送るデータを格納
+                        startActivity(intent) //2画面の起動
                     }
                 }
             }
