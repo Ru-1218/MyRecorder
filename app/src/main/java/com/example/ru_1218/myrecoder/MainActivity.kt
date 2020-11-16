@@ -11,6 +11,7 @@ import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import java.io.IOException
+import android.content.Intent
 
 
 private const val LOG_TAG = "AudioRecordTest"
@@ -110,12 +111,24 @@ class MainActivity : AppCompatActivity() {
         val record = findViewById<Button>(R.id.redord) //録音オブジェクト取得
         val stop = findViewById<Button>(R.id.stop) //録音停止オブジェクト取得
         val playback = findViewById<Button>(R.id.playback) //再生オブジェクト取得
+        val voicelist = findViewById<Button>(R.id.list_btn) //リストオブジェクト取得
 
         val listener = RecordButton() //レコードボタンリスナの設定
 
         record.setOnClickListener(listener)
         stop.setOnClickListener(listener)
         playback.setOnClickListener(listener)
+        voicelist.setOnClickListener(listener)
+
+
+    }
+
+    private fun voiceListEvent() {
+        val fileVoice = fileName
+
+        val intent = Intent(applicationContext, PlayBackActivity::class.java)
+        intent.putExtra("voice_file", fileVoice) //2画面に送るデータを格納
+        startActivity(intent) //2画面の起動
 
     }
 
@@ -142,6 +155,10 @@ class MainActivity : AppCompatActivity() {
                     R.id.playback -> {
                         onPlay(true)
                         Log.i(LOG_TAG, "再生中")
+                    }
+                    R.id.list_btn -> {
+                        voiceListEvent()//2画面用のイベント作成
+                        Log.i(LOG_TAG, "2画面のイベントの作成")
                     }
                 }
             }
