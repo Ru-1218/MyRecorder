@@ -13,6 +13,8 @@ import androidx.core.app.ActivityCompat
 import java.io.IOException
 import android.content.Intent
 import java.util.*
+import java.io.File
+
 
 private const val LOG_TAG = "AudioRecordTest"
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     private var fileName: String = ""
 
     private var player: MediaPlayer? = null
+
 
 
     private var permissionToRecordAccepted = false
@@ -129,15 +132,16 @@ class MainActivity : AppCompatActivity() {
     private inner class RecordButton : View.OnClickListener {
         override fun onClick(v: View?) {
             Log.i(LOG_TAG, "クリック成功")
-            Log.i(LOG_TAG, fileName)
-            val uuidString = UUID.randomUUID().toString()//クリックイベント時にuuidを生成
-            fileName = "${externalCacheDir?.absolutePath}/${uuidString}.3gp"
+
+            var tmpfileDir = "${externalCacheDir?.absolutePath}"
+
 
             if(v != null){
                 when(v.id){
                     //録音開始ボタン
                     R.id.redord -> {
-
+                        val uuidString = UUID.randomUUID().toString()//クリックイベント時にuuidを生成
+                        fileName = "${externalCacheDir?.absolutePath}/${uuidString}.3gp"
                         onRecord(true)
                         Log.i(LOG_TAG, "録音開始")
                     }
@@ -153,8 +157,18 @@ class MainActivity : AppCompatActivity() {
                     }
                     R.id.list_btn -> {
                         Log.i(LOG_TAG, "2画面のイベントの作成")
+
+                        val filePath = arrayListOf<String?>()
                         val intent = Intent(applicationContext, PlayBackActivity::class.java)
-                        intent.putExtra("voice_file", fileName) //2画面に送るデータを格納
+                        //どうやって取得しよう。。。
+                        val pathList = File(tmpfileDir).list()
+                        for (path in pathList){
+                            val path: String = "${externalCacheDir?.absolutePath}/${path}"
+                            filePath.add(path)
+                        }
+
+
+                        intent.putExtra("voice_file", filePath) //2画面に送るデータを格納
                         startActivity(intent) //2画面の起動
                     }
                 }

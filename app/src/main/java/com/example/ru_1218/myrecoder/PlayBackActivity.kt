@@ -11,14 +11,24 @@ class PlayBackActivity : AppCompatActivity() {
         setContentView(R.layout.activity_play_back)
 
         //録音メイン画面から取得したファイルを表示
-        val fileVoice = intent.getStringExtra("voice_file")
+        val fileVoice = intent.getSerializableExtra("voice_file") as ArrayList<*>
+
+
         val voiceName = findViewById<ListView>(R.id.voiceListMenu)
 
 
-        val VoiceList: MutableList<MutableMap<String,String?>> = mutableListOf()
+        val VoiceList: MutableList<MutableMap<String,String>> = mutableListOf()
         //simpleadapterで使用するMutableObjectを用意
-        var voiceMenu = mutableMapOf("name" to fileVoice)
-        VoiceList.add(voiceMenu)
+
+        fileVoice.forEach { path ->
+            var path = path as String
+            var file: List<String> = path.split("/")
+            var fileName = file.takeLast(1).first()
+            var uuid: String = fileName.replace(".3gp", "")
+            var voiceMenu = mutableMapOf("name" to uuid)
+            VoiceList.add(voiceMenu)
+        }
+
 
         val from = arrayOf("name")
 
