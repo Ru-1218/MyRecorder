@@ -7,7 +7,6 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
-import android.widget.Toast
 
 class PlayBackActivity : AppCompatActivity() {
 
@@ -52,8 +51,11 @@ class PlayBackActivity : AppCompatActivity() {
             val item= parent?.getItemAtPosition(position) as MutableMap<String, String>
 
             val uuid = item["name"] as String
-            //トーストの表示
-            Toast.makeText(applicationContext, uuid, Toast.LENGTH_LONG).show()
+
+            //ダイアログフラグメントオブジェクトの作成
+            val dialogFragment = DialogEvent(uuid)
+            dialogFragment.show(supportFragmentManager, "DialogEvent")
+
 
         }
 
