@@ -1,11 +1,17 @@
 package com.example.ru_1218.myrecoder
 
+
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
+import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import android.widget.Toast
 
 class PlayBackActivity : AppCompatActivity() {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_back)
@@ -15,7 +21,7 @@ class PlayBackActivity : AppCompatActivity() {
 
 
         val voiceName = findViewById<ListView>(R.id.voiceListMenu)
-
+        voiceName.onItemClickListener = ListItemClickListener()
 
         val VoiceList: MutableList<MutableMap<String,String>> = mutableListOf()
         //simpleadapterで使用するMutableObjectを用意
@@ -40,4 +46,17 @@ class PlayBackActivity : AppCompatActivity() {
         voiceName.adapter = adapter
 
     }
+
+    private inner class ListItemClickListener : AdapterView.OnItemClickListener {
+        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            val item= parent?.getItemAtPosition(position) as MutableMap<String, String>
+
+            val uuid = item["name"] as String
+            //トーストの表示
+            Toast.makeText(applicationContext, uuid, Toast.LENGTH_LONG).show()
+
+        }
+
+    }
+
 }

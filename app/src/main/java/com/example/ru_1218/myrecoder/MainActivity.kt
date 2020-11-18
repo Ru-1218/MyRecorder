@@ -160,7 +160,8 @@ class MainActivity : AppCompatActivity() {
 
                         val filePath = arrayListOf<String?>()
                         val intent = Intent(applicationContext, PlayBackActivity::class.java)
-                        //どうやって取得しよう。。。
+
+
                         val pathList = File(tmpfileDir).list()
                         for (path in pathList){
                             val path: String = "${externalCacheDir?.absolutePath}/${path}"
