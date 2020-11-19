@@ -3,12 +3,19 @@ package com.example.ru_1218.myrecoder
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextMenu
+import android.view.Menu
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
 
 class PlayBackActivity : AppCompatActivity() {
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.menu_context_menu_list, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,14 +44,17 @@ class PlayBackActivity : AppCompatActivity() {
 
         val from = arrayOf("name")
 
-        val to = intArrayOf(android.R.id.text1)
+        val to = intArrayOf(R.id.PlayBacklListData)
 
         //simple adapter
-        val adapter = SimpleAdapter(applicationContext, VoiceList, android.R.layout.simple_list_item_2, from, to)
+        val adapter = SimpleAdapter(applicationContext, VoiceList, R.layout.playback_list_row, from, to)
         //アダプタの登録
         voiceName.adapter = adapter
 
     }
+
+
+
 
     private fun getFileName(path: String): MutableMap<String, String> {
         var file: List<String> = path.split("/")

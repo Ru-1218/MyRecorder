@@ -5,5 +5,6 @@
     <string name="play_back">PLAYBACK</string>
     <string name="PLAYBACK">PLAYBACK</string>
     <string name="List_button">List</string>
+    <string name="MenuListEdit">Edit</string>
 
 </resources>
