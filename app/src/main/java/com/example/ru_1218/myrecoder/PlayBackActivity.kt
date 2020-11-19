@@ -20,17 +20,17 @@ class PlayBackActivity : AppCompatActivity() {
 
 
         val voiceName = findViewById<ListView>(R.id.voiceListMenu)
-        voiceName.onItemClickListener = ListItemClickListener()
+        voiceName.onItemClickListener = ListItemClickListener(fileVoice)
 
         val VoiceList: MutableList<MutableMap<String,String>> = mutableListOf()
         //simpleadapterで使用するMutableObjectを用意
 
+
+
         fileVoice.forEach { path ->
+            print(path)
             var path = path as String
-            var file: List<String> = path.split("/")
-            var fileName = file.takeLast(1).first()
-            var uuid: String = fileName.replace(".3gp", "")
-            var voiceMenu = mutableMapOf("name" to uuid)
+            var voiceMenu = getFileName(path)
             VoiceList.add(voiceMenu)
         }
 
@@ -46,17 +46,48 @@ class PlayBackActivity : AppCompatActivity() {
 
     }
 
-    private inner class ListItemClickListener : AdapterView.OnItemClickListener {
+    private fun getFileName(path: String): MutableMap<String, String> {
+        var file: List<String> = path.split("/")
+        var fileName = file.takeLast(1).first()
+        var uuid: String = fileName.replace(".3gp", "")
+        var voiceMenu = mutableMapOf("name" to uuid)
+        return voiceMenu
+    }
+
+    private fun checkFileName(path: String): String{
+        var file: List<String> = path.split("/")
+        var fileName = file.takeLast(1).first()
+        var uuid: String = fileName.replace(".3gp", "")
+        return uuid
+    }
+
+
+
+    private inner class ListItemClickListener(dataList: ArrayList<*>) : AdapterView.OnItemClickListener {
+        private var list: ArrayList<*> = dataList
+
         override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             val item= parent?.getItemAtPosition(position) as MutableMap<String, String>
 
             val uuid = item["name"] as String
-
+            val dataPath = sameNameFilePath(list, uuid)
             //ダイアログフラグメントオブジェクトの作成
-            val dialogFragment = DialogEvent(uuid)
+            val dialogFragment = DialogEvent(dataPath,uuid)
             dialogFragment.show(supportFragmentManager, "DialogEvent")
 
+        }
 
+        private fun sameNameFilePath(datas: ArrayList<*>, fileName: String): String? {
+            datas.forEach { path ->
+                print(path)
+                var path = path
+                var voiceMenu: String = checkFileName(path as String)
+                if (voiceMenu == fileName) {
+                    return path
+                }
+
+            }
+            return "teset"
         }
 
     }
