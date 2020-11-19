@@ -54,6 +54,22 @@ class PlayBackActivity : AppCompatActivity() {
     }
 
 
+    private inner class createEditMenu(dataList: ArrayList<*>): AdapterView.OnItemClickListener {
+        private var list: ArrayList<*> = dataList
+        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+            val item= parent?.getItemAtPosition(position) as MutableMap<String, String>
+            val name = item["name"] as String
+            val dataPath = sameNameFilePath(list, name)
+
+            //datapathの名前を編集するダイアログの生成
+
+
+
+        }
+
+    }
+
+
 
 
     private fun getFileName(path: String): MutableMap<String, String> {
@@ -71,7 +87,18 @@ class PlayBackActivity : AppCompatActivity() {
         return uuid
     }
 
+    private fun sameNameFilePath(datas: ArrayList<*>, fileName: String): String? {
+        datas.forEach { path ->
+            print(path)
+            var path = path
+            var voiceMenu: String = checkFileName(path as String)
+            if (voiceMenu == fileName) {
+                return path
+            }
 
+        }
+        return "teset"
+    }
 
     private inner class ListItemClickListener(dataList: ArrayList<*>) : AdapterView.OnItemClickListener {
         private var list: ArrayList<*> = dataList
@@ -87,18 +114,7 @@ class PlayBackActivity : AppCompatActivity() {
 
         }
 
-        private fun sameNameFilePath(datas: ArrayList<*>, fileName: String): String? {
-            datas.forEach { path ->
-                print(path)
-                var path = path
-                var voiceMenu: String = checkFileName(path as String)
-                if (voiceMenu == fileName) {
-                    return path
-                }
 
-            }
-            return "teset"
-        }
 
     }
 
