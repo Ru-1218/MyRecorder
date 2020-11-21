@@ -1,14 +1,16 @@
 package com.example.ru_1218.myrecoder
 
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.ContextMenu
 import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
+import android.widget.Toast
 
 class PlayBackActivity : AppCompatActivity() {
 
@@ -16,6 +18,23 @@ class PlayBackActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_context_menu_list, menu)
         return super.onCreateOptionsMenu(menu)
     }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+
+        var msg= "test"
+        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
+
+        //録音メイン画面から取得したファイルを表示
+        val fileVoice = intent.getSerializableExtra("voice_file") as ArrayList<*>
+
+        val intent = Intent(applicationContext, EditFileNameActivity::class.java)
+        intent.putExtra("EditNames", fileVoice)
+        startActivity(intent)
+
+        return super.onOptionsItemSelected(item)
+    }
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -28,6 +47,7 @@ class PlayBackActivity : AppCompatActivity() {
 
         val voiceName = findViewById<ListView>(R.id.voiceListMenu)
         voiceName.onItemClickListener = ListItemClickListener(fileVoice)
+
 
         val VoiceList: MutableList<MutableMap<String,String>> = mutableListOf()
         //simpleadapterで使用するMutableObjectを用意
@@ -53,22 +73,21 @@ class PlayBackActivity : AppCompatActivity() {
 
     }
 
-
-    private inner class createEditMenu(dataList: ArrayList<*>): AdapterView.OnItemClickListener {
+    private inner class ListItemClickListener(dataList: ArrayList<*>) : AdapterView.OnItemClickListener {
         private var list: ArrayList<*> = dataList
+
         override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             val item= parent?.getItemAtPosition(position) as MutableMap<String, String>
-            val name = item["name"] as String
-            val dataPath = sameNameFilePath(list, name)
 
-            //datapathの名前を編集するダイアログの生成
-
-
+            val uuid = item["name"] as String
+            val dataPath = sameNameFilePath(list, uuid)
+            //ダイアログフラグメントオブジェクトの作成
+            val dialogFragment = DialogEvent(dataPath,uuid)
+            dialogFragment.show(supportFragmentManager, "DialogEvent")
 
         }
 
     }
-
 
 
 
@@ -97,25 +116,9 @@ class PlayBackActivity : AppCompatActivity() {
             }
 
         }
-        return "teset"
+        return "test"
     }
 
-    private inner class ListItemClickListener(dataList: ArrayList<*>) : AdapterView.OnItemClickListener {
-        private var list: ArrayList<*> = dataList
 
-        override fun onItemClick(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-            val item= parent?.getItemAtPosition(position) as MutableMap<String, String>
-
-            val uuid = item["name"] as String
-            val dataPath = sameNameFilePath(list, uuid)
-            //ダイアログフラグメントオブジェクトの作成
-            val dialogFragment = DialogEvent(dataPath,uuid)
-            dialogFragment.show(supportFragmentManager, "DialogEvent")
-
-        }
-
-
-
-    }
 
 }

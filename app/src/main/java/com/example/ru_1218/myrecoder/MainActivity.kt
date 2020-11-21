@@ -159,7 +159,8 @@ class MainActivity : AppCompatActivity() {
                         Log.i(LOG_TAG, "2画面のイベントの作成")
 
                         val filePath = arrayListOf<String?>()
-                        val intent = Intent(applicationContext, PlayBackActivity::class.java)
+                        val intent = Intent(applicationContext, PlayBackActivity::class.java) //再生リスト
+
 
 
                         val pathList = File(tmpfileDir).list()
@@ -170,6 +171,9 @@ class MainActivity : AppCompatActivity() {
 
 
                         intent.putExtra("voice_file", filePath) //2画面に送るデータを格納
+
+
+
                         startActivity(intent) //2画面の起動
                     }
                 }

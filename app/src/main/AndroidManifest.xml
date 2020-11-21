@@ -11,6 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.MyRecoder">
+        <activity android:name=".EditFileNameActivity"></activity>
         <activity android:name=".PlayBackActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
