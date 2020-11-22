@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import java.io.IOException
 import android.content.Intent
+import android.widget.Toast
 import java.util.*
 import java.io.File
 
@@ -22,11 +23,7 @@ private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
 class MainActivity : AppCompatActivity() {
     private var recorder: MediaRecorder? = null
     private var fileName: String = ""
-
     private var player: MediaPlayer? = null
-
-
-
     private var permissionToRecordAccepted = false
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
 
@@ -75,23 +72,17 @@ class MainActivity : AppCompatActivity() {
         player = null
     }
 
-
-
-
-
     private fun startRecording() {
         recorder = MediaRecorder().apply {
             setAudioSource(MediaRecorder.AudioSource.MIC)
             setOutputFormat(MediaRecorder.OutputFormat.THREE_GPP)
             setOutputFile(fileName)
             setAudioEncoder(MediaRecorder.AudioEncoder.AMR_NB)
-
             try {
                 prepare()
             } catch (e: IOException){
                 Log.e(LOG_TAG, "prepare() failed")
             }
-
             start()
         }
     }
@@ -113,17 +104,13 @@ class MainActivity : AppCompatActivity() {
 
         val record = findViewById<Button>(R.id.redord) //録音オブジェクト取得
         val stop = findViewById<Button>(R.id.stop) //録音停止オブジェクト取得
-        val playback = findViewById<Button>(R.id.playback) //再生オブジェクト取得
         val voicelist = findViewById<Button>(R.id.list_btn) //リストオブジェクト取得
 
         val listener = RecordButton() //レコードボタンリスナの設定
 
         record.setOnClickListener(listener)
         stop.setOnClickListener(listener)
-        playback.setOnClickListener(listener)
         voicelist.setOnClickListener(listener)
-
-
     }
 
 
@@ -135,7 +122,6 @@ class MainActivity : AppCompatActivity() {
 
             var tmpfileDir = "${externalCacheDir?.absolutePath}"
 
-
             if(v != null){
                 when(v.id){
                     //録音開始ボタン
@@ -143,25 +129,19 @@ class MainActivity : AppCompatActivity() {
                         val uuidString = UUID.randomUUID().toString()//クリックイベント時にuuidを生成
                         fileName = "${externalCacheDir?.absolutePath}/${uuidString}.3gp"
                         onRecord(true)
-                        Log.i(LOG_TAG, "録音開始")
+                        Toast.makeText(applicationContext, "録音中", Toast.LENGTH_LONG).show()
                     }
                     //録音停止ボタン
                     R.id.stop -> {
                         onRecord(false)
-                        Log.i(LOG_TAG, "録音終了")
+                        Toast.makeText(applicationContext, "完了", Toast.LENGTH_LONG).show()
                     }
 
-                    R.id.playback -> {
-                        onPlay(true)
-                        Log.i(LOG_TAG, "再生中")
-                    }
+
                     R.id.list_btn -> {
-                        Log.i(LOG_TAG, "2画面のイベントの作成")
 
                         val filePath = arrayListOf<String?>()
                         val intent = Intent(applicationContext, PlayBackActivity::class.java) //再生リスト
-
-
 
                         val pathList = File(tmpfileDir).list()
                         for (path in pathList){
@@ -169,11 +149,7 @@ class MainActivity : AppCompatActivity() {
                             filePath.add(path)
                         }
 
-
                         intent.putExtra("voice_file", filePath) //2画面に送るデータを格納
-
-
-
                         startActivity(intent) //2画面の起動
                     }
                 }

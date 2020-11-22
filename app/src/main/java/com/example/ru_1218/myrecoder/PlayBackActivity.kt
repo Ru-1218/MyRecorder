@@ -10,7 +10,8 @@ import android.view.View
 import android.widget.AdapterView
 import android.widget.ListView
 import android.widget.SimpleAdapter
-import android.widget.Toast
+import java.io.File
+
 
 class PlayBackActivity : AppCompatActivity() {
 
@@ -21,16 +22,16 @@ class PlayBackActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
 
-        var msg= "test"
-        Toast.makeText(this, msg, Toast.LENGTH_LONG).show()
-
         //録音メイン画面から取得したファイルを表示
-        val fileVoice = intent.getSerializableExtra("voice_file") as ArrayList<*>
+        val filePath = arrayListOf<String?>()
 
+        val pathList = File("${externalCacheDir?.absolutePath}").list()
+        for (path in pathList){
+            val path: String = "${externalCacheDir?.absolutePath}/${path}"
+            filePath.add(path)
+        }
         val intent = Intent(applicationContext, EditFileNameActivity::class.java)
-        intent.putExtra("EditNames", fileVoice)
         startActivity(intent)
-
         return super.onOptionsItemSelected(item)
     }
 
@@ -40,21 +41,25 @@ class PlayBackActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_play_back)
+    }
 
+    override fun onResume() {
         //録音メイン画面から取得したファイルを表示
-        val fileVoice = intent.getSerializableExtra("voice_file") as ArrayList<*>
+        val filePath = arrayListOf<String?>()
+
+        val pathList = File("${externalCacheDir?.absolutePath}").list()
+        for (path in pathList){
+            val path: String = "${externalCacheDir?.absolutePath}/${path}"
+            filePath.add(path)
+        }
 
 
         val voiceName = findViewById<ListView>(R.id.voiceListMenu)
-        voiceName.onItemClickListener = ListItemClickListener(fileVoice)
-
+        voiceName.onItemClickListener = ListItemClickListener(filePath)
 
         val VoiceList: MutableList<MutableMap<String,String>> = mutableListOf()
-        //simpleadapterで使用するMutableObjectを用意
 
-
-
-        fileVoice.forEach { path ->
+        filePath.forEach { path ->
             print(path)
             var path = path as String
             var voiceMenu = getFileName(path)
@@ -63,15 +68,20 @@ class PlayBackActivity : AppCompatActivity() {
 
 
         val from = arrayOf("name")
-
         val to = intArrayOf(R.id.PlayBacklListData)
 
         //simple adapter
         val adapter = SimpleAdapter(applicationContext, VoiceList, R.layout.playback_list_row, from, to)
         //アダプタの登録
         voiceName.adapter = adapter
-
+        super.onResume()
     }
+
+
+    override fun onPause() {
+        super.onPause()
+    }
+
 
     private inner class ListItemClickListener(dataList: ArrayList<*>) : AdapterView.OnItemClickListener {
         private var list: ArrayList<*> = dataList
@@ -84,9 +94,7 @@ class PlayBackActivity : AppCompatActivity() {
             //ダイアログフラグメントオブジェクトの作成
             val dialogFragment = DialogEvent(dataPath,uuid)
             dialogFragment.show(supportFragmentManager, "DialogEvent")
-
         }
-
     }
 
 
@@ -114,11 +122,7 @@ class PlayBackActivity : AppCompatActivity() {
             if (voiceMenu == fileName) {
                 return path
             }
-
         }
-        return "test"
+        return null
     }
-
-
-
 }
