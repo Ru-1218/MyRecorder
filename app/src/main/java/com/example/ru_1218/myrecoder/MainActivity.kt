@@ -118,7 +118,6 @@ class MainActivity : AppCompatActivity() {
     //クリックイベントの設定
     private inner class RecordButton : View.OnClickListener {
         override fun onClick(v: View?) {
-            Log.i(LOG_TAG, "クリック成功")
 
             var tmpfileDir = "${externalCacheDir?.absolutePath}"
 
