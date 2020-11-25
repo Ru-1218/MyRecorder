@@ -11,12 +11,13 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import java.io.IOException
 import android.content.Intent
+import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import java.util.*
 import java.io.File
-
+import kotlinx.android.synthetic.main.activity_main.*
 
 private const val LOG_TAG = "AudioRecordTest"
 private const val REQUEST_RECORD_AUDIO_PERMISSION = 200
@@ -26,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     private var fileName: String = ""
     private var permissionToRecordAccepted = false
     private var permissions: Array<String> = arrayOf(Manifest.permission.RECORD_AUDIO)
+    private var timeValue = 0
+    private val handler = Handler()
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         menuInflater.inflate(R.menu.main_context_menue, menu)
@@ -115,13 +118,28 @@ class MainActivity : AppCompatActivity() {
 
         val listener = RecordButton() //レコードボタンリスナの設定
 
+
+
         record.setOnClickListener(listener)
         stop.setOnClickListener(listener)
+
+
+
+    }
+
+    val runnable = object : Runnable {
+        override fun run() {
+            timeValue++
+            timeToText(timeValue)?.let {
+                timeText.text = it
+            }
+            handler.postDelayed(this, 1000)
+        }
     }
 
 
-
     //クリックイベントの設定
+
     private inner class RecordButton : View.OnClickListener {
         override fun onClick(v: View?) {
 
@@ -132,17 +150,40 @@ class MainActivity : AppCompatActivity() {
                         val uuidString = UUID.randomUUID().toString()//クリックイベント時にuuidを生成
                         fileName = "${externalCacheDir?.absolutePath}/${uuidString}.3gp"
                         onRecord(true)
+                        handler.post(runnable) //スレッド間通信
+
+
                         Toast.makeText(applicationContext, "録音中", Toast.LENGTH_LONG).show()
                     }
                     //録音停止ボタン
                     R.id.stop -> {
                         onRecord(false)
                         Toast.makeText(applicationContext, "完了", Toast.LENGTH_LONG).show()
+                        handler.removeCallbacks(runnable)
+                        timeValue = 0
+                        timeToText()?.let {
+                            timeText.text = it
+                        }
                     }
                 }
             }
-
         }
+    }
 
+    private fun timeToText(time: Int = 0): String? {
+        return when {
+            time < 0 -> {
+                null
+            }
+            time == 0 -> {
+                "00:00:00"
+            }
+            else -> {
+                val h = time / 3600
+                val m = time % 3600 / 60
+                val s = time % 60
+                "%1$02d:%2$02d:%3$02d:".format(h, m, s) //表示用に整形
+            }
+        }
     }
 }

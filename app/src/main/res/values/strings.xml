@@ -7,6 +7,7 @@
     <string name="List_button">List</string>
     <string name="MenuListEdit">Edit</string>
     <string name="menu1">再生リスト</string>
+    <string name="timer_zero"></string>
 
 
 </resources>
